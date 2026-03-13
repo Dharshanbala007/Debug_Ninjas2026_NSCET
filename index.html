@@ -2312,7 +2312,7 @@
 
     <nav class="glass">
 
-        <div class="nav-logo orbitron" onclick="navigate('home')">NEXT_GEN</div>
+        <div class="nav-logo orbitron" onclick="navigate('home')">DEV_NINJA</div>
 
         <div class="hamburger" onclick="toggleMenu()">
 
@@ -2820,13 +2820,33 @@
 
                             <div class="input-group">
 
-                                <label>Problem ID (e.g. SW001) <span class="req">*</span></label>
+                                <label>Problem Statement <span class="req">*</span></label>
 
-                                <input type="text" class="form-control" name="problemId" id="problemIdInput"
+                                <div style="display:flex; gap:0.75rem; margin-bottom:0.75rem; flex-wrap:wrap;">
 
-                                    placeholder="SW001 or HW003" required onkeyup="updateTrackLabel()">
+                                    <button type="button" id="btnSelectStatement" onclick="chooseStatementType('select')"
+                                        style="flex:1; padding:0.6rem 1rem; border-radius:8px; border:2px solid var(--accent-cyan); background:transparent; color:var(--accent-cyan); font-family:'Rajdhani',sans-serif; font-size:1rem; font-weight:700; cursor:pointer; transition:all 0.3s; letter-spacing:1px;">
+                                        📋 SELECT STATEMENT
+                                    </button>
 
-                                <span id="track-label"></span>
+                                    <button type="button" id="btnOpenStatement" onclick="chooseStatementType('open')"
+                                        style="flex:1; padding:0.6rem 1rem; border-radius:8px; border:2px solid var(--accent-violet); background:transparent; color:#a78bfa; font-family:'Rajdhani',sans-serif; font-size:1rem; font-weight:700; cursor:pointer; transition:all 0.3s; letter-spacing:1px;">
+                                        🚀 OPEN STATEMENT
+                                    </button>
+
+                                </div>
+
+                                <div id="selectStatementBox" style="display:none;">
+                                    <input type="text" class="form-control" id="problemIdInput"
+                                        placeholder="SW001 or HW003" onkeyup="updateTrackLabel()">
+                                    <span id="track-label"></span>
+                                </div>
+
+                                <div id="openStatementBox" style="display:none; padding:0.5rem 1rem; border-radius:8px; background:rgba(124,58,237,0.15); border:1px solid rgba(124,58,237,0.4); color:#a78bfa; font-weight:600;">
+                                    ✅ Open Statement selected — your team will propose their own problem.
+                                </div>
+
+                                <input type="hidden" name="problemId" id="problemIdFinal">
 
                             </div>
 
@@ -3386,9 +3406,39 @@
 
         // Handle forms
 
+        function chooseStatementType(type) {
+            const selectBox  = document.getElementById('selectStatementBox');
+            const openBox    = document.getElementById('openStatementBox');
+            const finalInput = document.getElementById('problemIdFinal');
+            const btnSelect  = document.getElementById('btnSelectStatement');
+            const btnOpen    = document.getElementById('btnOpenStatement');
+
+            if (type === 'open') {
+                selectBox.style.display    = 'none';
+                openBox.style.display      = 'block';
+                finalInput.value           = 'Open Statement';
+                btnOpen.style.background   = 'rgba(124,58,237,0.3)';
+                btnOpen.style.boxShadow    = '0 0 15px rgba(124,58,237,0.4)';
+                btnSelect.style.background = 'transparent';
+                btnSelect.style.boxShadow  = 'none';
+                document.getElementById('track-label').innerText = '';
+            } else {
+                openBox.style.display      = 'none';
+                selectBox.style.display    = 'block';
+                finalInput.value           = '';
+                btnSelect.style.background = 'rgba(0,245,196,0.15)';
+                btnSelect.style.boxShadow  = '0 0 15px rgba(0,245,196,0.3)';
+                btnOpen.style.background   = 'transparent';
+                btnOpen.style.boxShadow    = 'none';
+                updateTrackLabel();
+            }
+        }
+
         function updateTrackLabel() {
 
             const id = document.getElementById('problemIdInput').value.trim().toUpperCase();
+            const finalInput = document.getElementById('problemIdFinal');
+            if (finalInput) finalInput.value = document.getElementById('problemIdInput').value.trim();
 
             const lbl = document.getElementById('track-label');
 
@@ -3474,7 +3524,12 @@
 
             const data = Object.fromEntries(fd.entries());
 
-            data.track = (data.problemId.toUpperCase().startsWith('HW')) ? 'Hardware' : 'Software';
+            // Set track based on statement type
+            if (data.problemId === 'Open Statement') {
+                data.track = 'Open';
+            } else {
+                data.track = (data.problemId.toUpperCase().startsWith('HW')) ? 'Hardware' : 'Software';
+            }
 
 
 
