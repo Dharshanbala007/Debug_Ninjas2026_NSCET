@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Ninja's Hackathon 2026</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #030712;
+            --accent-cyan: #00f5c4;
+            --accent-violet: #7c3aed;
+            --highlight-amber: #f59e0b;
+            --text-light: #f3f4f6;
+            --text-muted: #9ca3af;
+            --glass-bg: rgba(17, 24, 39, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(124, 58, 237, 0.15), transparent 40%),
+                radial-gradient(circle at 85% 30%, rgba(0, 245, 196, 0.15), transparent 40%);
+            background-attachment: fixed;
+        }
+
+        h1, h2, h3, h4, h5, .orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .mono {
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        /* Custom glowing cyan scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 245, 196, 0.3);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-cyan);
+            box-shadow: 0 0 10px var(--accent-cyan);
+        }
+
+        /* SPA Page Transitions */
+        .page {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+        .page.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Particles System */
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .particle {
+            position: absolute;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            opacity: 0;
+            box-shadow: 0 0 10px var(--accent-cyan);
+            animation: float 10s infinite linear;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.8; }
+            100% { transform: translateY(-100px) scale(1); opacity: 0; }
+        }
+
+        /* Morphing Blobs */
+        .blob {
+            position: absolute;
+            filter: blur(40px);
+            z-index: 0;
+            opacity: 0.5;
+            animation: morph 8s ease-in-out infinite both alternate;
+        }
+        .blob-1 {
+            width: 300px;
+            height: 300px;
+            background: var(--accent-violet);
+            top: 10%;
+            left: -100px;
+        }
+        .blob-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--accent-cyan);
+            bottom: -100px;
+            right: -100px;
+            animation-delay: 2s;
+        }
+        @keyframes morph {
+            0% { border-radius: 40% 60% 70% 30% / 40% 40% 60% 50%; transform: rotate(0deg); }
+            100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; transform: rotate(45deg); }
+        }
+
+        /* Glassmorphism Classes */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            box-shadow: var(--glass-shadow);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            border-bottom: 1px solid rgba(0, 245, 196, 0.2);
+        }
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-light);
+            text-shadow: 0 0 10px var(--accent-cyan);
+            cursor: pointer;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--accent-cyan);
+            transition: width 0.3s;
+            box-shadow: 0 0 5px var(--accent-cyan);
+        }
+        .nav-links a:hover::after, .nav-links a.active::after {
+            width: 100%;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 5px var(--accent-cyan);
+        }
+
+        /* Mobile Menu */
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .hamburger div {
+            width: 25px;
+            height: 3px;
+            background-color: var(--accent-cyan);
+            transition: all 0.3s;
+            box-shadow: 0 0 5px var(--accent-cyan);
+        }
+
+        /* Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Page: HOME --- */
+        .home-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: calc(100vh - 80px);
+            position: relative;
+            z-index: 10;
+            padding: 2rem;
+        }
+        .logos {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .logos img {
+            max-width: 150px;
+            height: auto;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
+            transition: transform 0.3s;
+        }
+        .logos img:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 15px var(--accent-cyan));
+        }
+        .logo-divider {
+            width: 2px;
+            height: 80px;
+            background: var(--accent-cyan);
+            box-shadow: 0 0 15px var(--accent-cyan);
+        }
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+        .hero-title .solid {
+            color: #fff;
+        }
+        .hero-title .outline {
+            color: transparent;
+            -webkit-text-stroke: 2px var(--accent-cyan);
+            text-shadow: 0 0 20px rgba(0, 245, 196, 0.5);
+        }
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+        }
+        .stats-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        .stat-box {
+            padding: 1.5rem;
+            min-width: 150px;
+            text-align: center;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        .stat-box:hover {
+            border-bottom-color: var(--accent-violet);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(124, 58, 237, 0.2);
+        }
+        .stat-num {
+            font-size: 2.5rem;
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px rgba(0, 245, 196, 0.3);
+            margin-bottom: 0.5rem;
+        }
+        /* Update buttons */
+        .btn-container {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+        .btn {
+            padding: 1rem 2.5rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .btn-primary {
+            background-color: var(--accent-cyan);
+            color: var(--bg-dark);
+            border: none;
+            box-shadow: 0 0 20px rgba(0, 245, 196, 0.4);
+        }
+        .btn-primary:hover {
+            box-shadow: 0 0 30px rgba(0, 245, 196, 0.6);
+            transform: scale(1.05);
+        }
+        .btn-outline {
+            background-color: transparent;
+            color: var(--accent-cyan);
+            border: 2px solid var(--accent-cyan);
+        }
+        .btn-outline:hover {
+            background-color: rgba(0, 245, 196, 0.1);
+            box-shadow: 0 0 20px rgba(0, 245, 196, 0.3);
+            transform: scale(1.05);
+        }
+        .venue-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: var(--highlight-amber);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+        .organizer-text {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-top: 2rem;
+        }
+
+        /* --- Default Container for Pages --- */
+        .content-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+        .page-title {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            color: var(--text-light);
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            position: relative;
+        }
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+        }
+
+        /* --- Page: ABOUT --- */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .about-card {
+            padding: 2rem;
+            position: relative;
+        }
+        /* Animated gradient border on hover */
+        .about-card::before, .problem-card::before, .committee-card::before, .register-form::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            border-radius: 18px;
+            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-violet), var(--highlight-amber));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .about-card:hover::before, .problem-card:hover::before, .committee-card:hover::before {
+            opacity: 1;
+            animation: borderPulse 2s linear infinite;
+        }
+        @keyframes borderPulse {
+            0% { filter: blur(5px); opacity: 0.6; }
+            50% { filter: blur(10px); opacity: 1; }
+            100% { filter: blur(5px); opacity: 0.6; }
+        }
+        .about-card h3 {
+            color: var(--accent-violet);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .about-card p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #d1d5db;
+        }
+        .timeline-container {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+        .timeline-container::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            background: var(--accent-cyan);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -1px;
+            box-shadow: 0 0 10px var(--accent-cyan);
+        }
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            right: -10px;
+            background-color: var(--bg-dark);
+            border: 4px solid var(--accent-cyan);
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+            box-shadow: 0 0 10px var(--accent-cyan);
+        }
+        .timeline-left {
+            left: 0;
+        }
+        .timeline-right {
+            left: 50%;
+        }
+        .timeline-right::after {
+            left: -10px;
+        }
+        .timeline-content {
+            padding: 1.5rem;
+            border-radius: 12px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+        }
+        .timeline-content h4 {
+            color: var(--accent-cyan);
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+        .timeline-content p {
+            color: #d1d5db;
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        /* --- Page: PROBLEMS --- */
+        .filter-bar {
+            position: sticky;
+            top: 80px;
+            z-index: 100;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--accent-cyan);
+            color: var(--bg-dark);
+            box-shadow: 0 0 15px var(--accent-cyan);
+        }
+        .count-badge {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--accent-violet);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.2rem;
+        }
+        .problems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .problem-card {
+            padding: 1.5rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s, box-shadow 0.3s;
+            background: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+        }
+        .problem-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        .card-top-accent {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+        }
+        .problem-card.sw .card-top-accent { background: var(--accent-cyan); box-shadow: 0 0 10px var(--accent-cyan); }
+        .problem-card.sw:hover { box-shadow: 0 0 30px rgba(0, 245, 196, 0.2); }
+        .problem-card.hw .card-top-accent { background: var(--accent-violet); box-shadow: 0 0 10px var(--accent-violet); }
+        .problem-card.hw:hover { box-shadow: 0 0 30px rgba(124, 58, 237, 0.2); }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            margin-top: 0.5rem;
+        }
+        .pid-badge {
+            padding: 0.2rem 0.6rem;
+            border-radius: 5px;
+            font-family: 'Share Tech Mono', monospace;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        .problem-card.sw .pid-badge { background: rgba(0, 245, 196, 0.2); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
+        .problem-card.hw .pid-badge { background: rgba(124, 58, 237, 0.2); color: #c4b5fd; border: 1px solid var(--accent-violet); }
+        
+        .theme-tag {
+            background: rgba(156, 163, 175, 0.1);
+            color: var(--text-muted);
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(156, 163, 175, 0.3);
+        }
+        .problem-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+        .problem-category {
+            color: var(--highlight-amber);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        .problem-desc {
+            color: #d1d5db;
+            font-size: 1rem;
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+
+        /* --- Page: COMMITTEE --- */
+        .committee-section-title {
+            text-align: center;
+            color: var(--highlight-amber);
+            font-size: 2rem;
+            margin: 2rem 0 1.5rem;
+        }
+        .chief-guest-card {
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            text-align: center;
+            border: 1px solid rgba(245, 158, 11, 0.5);
+            background: rgba(17, 24, 39, 0.8);
+        }
+        .chief-guests-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+        .person {
+            padding: 1rem;
+        }
+        .person-name {
+            font-size: 1.4rem;
+            color: #fff;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .person-role {
+            color: var(--highlight-amber);
+            font-family: 'Share Tech Mono', monospace;
+        }
+        .committee-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        .committee-card {
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .committee-card .person-name { color: var(--accent-cyan); }
+        .committee-card .person-role { color: #d1d5db; }
+        .obs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        .obs-card {
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            background: rgba(124, 58, 237, 0.05);
+        }
+        .obs-card .person-name { color: #c4b5fd; font-size: 1.2rem; }
+        .obs-card .person-role { color: var(--text-muted); }
+
+        /* --- Page: REGISTER --- */
+        .register-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .register-form {
+            padding: 2.5rem;
+            position: relative;
+            background: rgba(17, 24, 39, 0.85);
+        }
+        .form-top-border {
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 5px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-violet), var(--highlight-amber));
+            border-top-left-radius: 16px; border-top-right-radius: 16px;
+        }
+        .form-section {
+            margin-bottom: 2.5rem;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 2rem;
+        }
+        .form-section:last-child {
+            border-bottom: none;
+        }
+        .form-section-title {
+            color: var(--accent-cyan);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .input-group {
+            margin-bottom: 1.2rem;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #d1d5db;
+            font-weight: 600;
+        }
+        .input-group label span.req { color: #ef4444; }
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 10px rgba(0, 245, 196, 0.2);
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300f5c4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+        select.form-control option { background-color: var(--bg-dark); }
+        #track-label {
+            margin-top: 5px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--highlight-amber);
+            display: block;
+        }
+        .btn-submit {
+            width: 100%;
+            padding: 1.2rem;
+            font-size: 1.5rem;
+            margin-top: 1rem;
+        }
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        .file-input-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .btn-file {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: rgba(124, 58, 237, 0.2);
+            border: 1px dashed var(--accent-violet);
+            color: #c4b5fd;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-file:hover {
+            background: rgba(124, 58, 237, 0.4);
+        }
+        .error-msg {
+            color: #ef4444;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+        #submit-status {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+            font-weight: 700;
+        }
+        .status-success {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            border: 1px solid #059669;
+        }
+        .status-error {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid #dc2626;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .hero-title { font-size: 4rem; }
+        }
+        @media (max-width: 768px) {
+            .nav-links {
+                position: absolute;
+                top: 70px;
+                right: -100%;
+                flex-direction: column;
+                background: var(--glass-bg);
+                backdrop-filter: blur(20px);
+                width: 250px;
+                padding: 2rem;
+                border-radius: 0 0 0 16px;
+                border: 1px solid var(--glass-border);
+                transition: right 0.4s ease;
+            }
+            .nav-links.active { right: 0; }
+            .hamburger { display: flex; }
+            .about-grid, .chief-guests-grid { grid-template-columns: 1fr; }
+            .grid-2 { grid-template-columns: 1fr; }
+            .timeline-container::after { left: 31px; }
+            .timeline-item { width: 100%; padding-left: 70px; padding-right: 25px; }
+            .timeline-item::after { left: 21px; }
+            .timeline-right { left: 0; }
+            .logos { flex-direction: column; gap: 1rem; }
+            .logo-divider { width: 80px; height: 2px; }
+            .hero-title { font-size: 3rem; }
+            .btn-container { flex-direction: column; width: 100%; }
+        }
+        @media (max-width: 320px) {
+            .hero-title { font-size: 2.2rem; }
+            .stat-box { min-width: 120px; padding: 1rem; }
+            .stat-num { font-size: 1.8rem; }
+            .form-control { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Dynamic Background Elements -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div id="particles"></div>
+
+    <!-- Navigation -->
+    <nav class="glass">
+        <div class="nav-logo orbitron" onclick="navigate('home')">DEV_NINJA</div>
+        <div class="hamburger" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <ul class="nav-links">
+            <li><a onclick="navigate('home')" class="nav-btn active" data-target="home">HOME</a></li>
+            <li><a onclick="navigate('about')" class="nav-btn" data-target="about">ABOUT</a></li>
+            <li><a onclick="navigate('problems')" class="nav-btn" data-target="problems">PROBLEMS</a></li>
+            <li><a onclick="navigate('committee')" class="nav-btn" data-target="committee">COMMITTEE</a></li>
+            <li><a onclick="navigate('register')" class="nav-btn" data-target="register">REGISTER</a></li>
+        </ul>
+    </nav>
+
+    <!-- PAGE 1: HOME -->
+    <main id="home" class="page active">
+        <div class="home-container reveal">
+            <div class="logos">
+                <img src="[BASE64_NSCET]" alt="NSCET Logo">
+                <div class="logo-divider"></div>
+                <img src="[BASE64_7TH]" alt="7th Sense Logo">
+            </div>
+            <h1 class="hero-title">
+                <span class="solid">DEBUG</span> <span class="outline">NINJA'S</span>
+            </h1>
+            <p class="hero-subtitle">An Intra College 6 Hours Hackathon</p>
+            
+            <div class="venue-badge glass">
+                📅 10th April 2026 &nbsp;|&nbsp; 📍 NSCET Campus, Vadapudupatti, Theni – 625 531
+            </div>
+
+            <div class="stats-container">
+                <div class="stat-box glass">
+                    <div class="stat-num mono">6</div>
+                    <div class="stat-label">Hours</div>
+                </div>
+                <div class="stat-box glass">
+                    <div class="stat-num mono">50</div>
+                    <div class="stat-label">Problems</div>
+                </div>
+                <div class="stat-box glass">
+                    <div class="stat-num mono">6</div>
+                    <div class="stat-label">Members/Team</div>
+                </div>
+                <div class="stat-box glass">
+                    <div class="stat-num mono">1</div>
+                    <div class="stat-label">Campus</div>
+                </div>
+            </div>
+
+            <div class="btn-container">
+                <button class="btn btn-primary" onclick="navigate('register')">REGISTER NOW →</button>
+                <button class="btn btn-outline" onclick="navigate('problems')">VIEW PROBLEMS</button>
+            </div>
+
+            <p class="organizer-text">Organized by: 7th Sense Association, Dept. of Science & Humanities, NSCET</p>
+        </div>
+    </main>
+
+    <!-- PAGE 2: ABOUT -->
+    <main id="about" class="page">
+        <div class="content-container">
+            <h2 class="page-title orbitron reveal">ABOUT THE EVENT</h2>
+            
+            <div class="about-grid">
+                <div class="about-card glass reveal">
+                    <h3>🏛️ About NSCET</h3>
+                    <p>Founded under Theni Melapettai Hindu Nadargal Uravinmurai, NSCET is an AICTE approved institution affiliated to Anna University, Chennai. Accredited with NAAC 'A' Grade, ISO 9001:2015 certified, and recognized under UGC Section 2(f). Located at Vadapudupatti, Annanji PO, Theni – 625 531.</p>
+                    <br>
+                    <p><strong>Motto:</strong> "Engineering Excellence for Empowerment"</p>
+                </div>
+                <div class="about-card glass reveal">
+                    <h3>🧠 7th Sense Association</h3>
+                    <p>The elite student association of the Department of Science and Humanities, NSCET. Dedicated to organizing technical events, workshops, and hackathons designed to develop holistic engineering skills and foster innovation among first-year scholars.</p>
+                </div>
+                <div class="about-card glass reveal" style="grid-column: 1 / -1;">
+                    <h3>⚔️ Debug Ninja's Hackathon</h3>
+                    <p>A rigorous 6-hour intra-college hackathon featuring 50 real-world problem statements (25 Software, 25 Hardware). Teams of up to 6 members, guided by a faculty mentor, will race against time to architect and prototype innovative solutions under intense pressure.</p>
+                </div>
+            </div>
+
+            <h3 class="page-title orbitron reveal" style="margin-top: 4rem; font-size: 2.5rem;">EVENT TIMELINE</h3>
+            <div class="timeline-container">
+                <div class="timeline-item timeline-left reveal">
+                    <div class="timeline-content">
+                        <h4>🔐 Registration Open</h4>
+                        <p>Now Accepted</p>
+                    </div>
+                </div>
+                <div class="timeline-item timeline-right reveal">
+                    <div class="timeline-content">
+                        <h4>📋 Problem Release</h4>
+                        <p>10 Apr 2026, 9:00 AM</p>
+                    </div>
+                </div>
+                <div class="timeline-item timeline-left reveal">
+                    <div class="timeline-content">
+                        <h4>💻 Hacking Begins</h4>
+                        <p>10 Apr 2026, 10:00 AM</p>
+                    </div>
+                </div>
+                <div class="timeline-item timeline-right reveal">
+                    <div class="timeline-content">
+                        <h4>🍱 Mid-Review</h4>
+                        <p>10 Apr 2026, 1:00 PM</p>
+                    </div>
+                </div>
+                <div class="timeline-item timeline-left reveal">
+                    <div class="timeline-content">
+                        <h4>🏁 Final Submission</h4>
+                        <p>10 Apr 2026, 4:00 PM</p>
+                    </div>
+                </div>
+                <div class="timeline-item timeline-right reveal">
+                    <div class="timeline-content">
+                        <h4>🏆 Results & Prizes</h4>
+                        <p>10 Apr 2026, 5:00 PM</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- PAGE 3: PROBLEM STATEMENTS -->
+    <main id="problems" class="page">
+        <div class="content-container">
+            <h2 class="page-title orbitron reveal">PROBLEM STATEMENTS</h2>
+            
+            <div class="filter-bar glass reveal">
+                <button class="filter-btn active" onclick="filterProblems('all')">All (50)</button>
+                <button class="filter-btn" onclick="filterProblems('sw')">⚡ Software (25)</button>
+                <button class="filter-btn" onclick="filterProblems('hw')">🔧 Hardware (25)</button>
+            </div>
+
+            <div class="count-badge reveal" id="problem-count">Showing 50 of 50 problems</div>
+
+            <div class="problems-grid" id="problems-container">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </main>
+
+    <!-- PAGE 4: COMMITTEE -->
+    <main id="committee" class="page">
+        <div class="content-container">
+            <h2 class="page-title orbitron reveal">COMMITTEE</h2>
+            
+            <h3 class="committee-section-title orbitron reveal">Chief Guests</h3>
+            <div class="chief-guest-card glass reveal">
+                <div class="chief-guests-grid">
+                    <div class="person">
+                        <div class="person-name">Er. A.S.S.S. Somasundaram, B.E.</div>
+                        <div class="person-role">Secretary, NSCET</div>
+                    </div>
+                    <div class="person">
+                        <div class="person-name">T. Subramani, B.C.A., M.B.A.</div>
+                        <div class="person-role">Joint Secretary, NSCET</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="committee-section-title orbitron reveal">College Committee</h3>
+            <div class="committee-grid">
+                <div class="committee-card glass reveal">
+                    <div class="person-name">Dr. C. Mathalai Sundaram</div>
+                    <div class="person-role">M.E., M.B.A., Ph.D., MISTE<br>Principal, NSCET</div>
+                </div>
+                <div class="committee-card glass reveal">
+                    <div class="person-name">Dr. M. Sathya</div>
+                    <div class="person-role">M.Tech., M.B.A., Ph.D.<br>Vice Principal, NSCET</div>
+                </div>
+                <div class="committee-card glass reveal">
+                    <div class="person-name">Dr. A. Vembathurajesh</div>
+                    <div class="person-role">M.E., Ph.D.<br>Head In-charge, S&H, NSCET</div>
+                </div>
+                <div class="committee-card glass reveal">
+                    <div class="person-name">Dr. C. Chithra</div>
+                    <div class="person-role">M.Sc., M.Phil., B.Ed., PGDCA., Ph.D.<br>Co-Ordinator, S&H, NSCET</div>
+                </div>
+                <div class="committee-card glass reveal">
+                    <div class="person-name">Dr. M. Veerakumar</div>
+                    <div class="person-role">M.Sc., M.Tech., Ph.D.<br>NSCET</div>
+                </div>
+            </div>
+
+            <h3 class="committee-section-title orbitron reveal">7th Sense Office Bearers</h3>
+            <div class="obs-grid">
+                <div class="obs-card glass reveal">
+                    <div class="person-name">H. Juhi Nushrath</div>
+                    <div class="person-role">CSE, I Year</div>
+                </div>
+                <div class="obs-card glass reveal">
+                    <div class="person-name">S. Marimuthu</div>
+                    <div class="person-role">MECH, I Year</div>
+                </div>
+                <div class="obs-card glass reveal">
+                    <div class="person-name">M. Asifa</div>
+                    <div class="person-role">EEE, I Year</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- PAGE 5: REGISTER -->
+    <main id="register" class="page">
+        <div class="content-container">
+            <h2 class="page-title orbitron reveal">TEAM REGISTRATION</h2>
+            
+            <div class="register-container">
+                <form id="regForm" class="register-form glass reveal">
+                    <div class="form-top-border"></div>
+                    
+                    <!-- Section A: Team Info -->
+                    <div class="form-section">
+                        <h3 class="form-section-title"><span>📝</span> Section A: Team Info</h3>
+                        <div class="input-group">
+                            <label>Team Name <span class="req">*</span></label>
+                            <input type="text" class="form-control" name="teamName" required>
+                        </div>
+                        <div class="grid-2">
+                            <div class="input-group">
+                                <label>Department <span class="req">*</span></label>
+                                <select class="form-control" name="department" required>
+                                    <option value="" disabled selected>Select Dept...</option>
+                                    <option value="CSE">CSE</option>
+                                    <option value="ECE">ECE</option>
+                                    <option value="EEE">EEE</option>
+                                    <option value="MECH">MECH</option>
+                                    <option value="CIVIL">CIVIL</option>
+                                    <option value="IT">IT</option>
+                                    <option value="S&H">S&H</option>
+                                    <option value="MCA">MCA</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Problem ID (e.g. SW001) <span class="req">*</span></label>
+                                <input type="text" class="form-control" name="problemId" id="problemIdInput" placeholder="SW001 or HW003" required onkeyup="updateTrackLabel()">
+                                <span id="track-label"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section B: Team Leader -->
+                    <div class="form-section">
+                        <h3 class="form-section-title"><span>👑</span> Section B: Team Leader</h3>
+                        <div class="input-group">
+                            <label>Leader Full Name <span class="req">*</span></label>
+                            <input type="text" class="form-control" name="leaderName" required>
+                        </div>
+                        <div class="grid-2">
+                            <div class="input-group">
+                                <label>Mobile Number <span class="req">*</span></label>
+                                <input type="tel" class="form-control" name="leaderMobile" required pattern="[0-9]{10}">
+                            </div>
+                            <div class="input-group">
+                                <label>Email Address <span class="req">*</span></label>
+                                <input type="email" class="form-control" name="leaderEmail" required>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>ID Card Proof <span class="req">*</span></label>
+                            <div class="file-input-wrapper">
+                                <div class="btn-file" id="fileBtnText">
+                                    📄 Upload ID Card (Image/PDF)
+                                </div>
+                                <input type="file" id="idCardFile" accept="image/*,.pdf" required onchange="handleFileUpload(event)">
+                            </div>
+                            <input type="hidden" name="idCardBase64" id="idCardBase64">
+                            <div class="error-msg" id="fileError">File too large or invalid.</div>
+                        </div>
+                    </div>
+
+                    <!-- Section C: Team Members -->
+                    <div class="form-section">
+                        <h3 class="form-section-title"><span>👥</span> Section C: Team Members</h3>
+                        <p style="color:var(--text-muted); margin-bottom:1rem; font-size:0.9rem;">Fill details for 2nd to 5th members. (Optional if team < 5 members)</p>
+                        
+                        <!-- Generator for 4 members -->
+                        <div id="membersContainer"></div>
+                    </div>
+
+                    <!-- Section D: Senior Member -->
+                    <div class="form-section">
+                        <h3 class="form-section-title"><span>🎓</span> Section D: Senior Member</h3>
+                        <p style="color:var(--text-muted); margin-bottom:1rem; font-size:0.9rem;">(Optional) Senior student associate.</p>
+                        <div class="input-group">
+                            <label>Senior Name</label>
+                            <input type="text" class="form-control" name="seniorName">
+                        </div>
+                        <div class="grid-2">
+                            <div class="input-group">
+                                <label>Mobile Number</label>
+                                <input type="tel" class="form-control" name="seniorMobile" pattern="[0-9]{10}">
+                            </div>
+                            <div class="input-group">
+                                <label>Email Address</label>
+                                <input type="email" class="form-control" name="seniorEmail">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section E: Faculty Mentor -->
+                    <div class="form-section">
+                        <h3 class="form-section-title"><span>👨‍🏫</span> Section E: Faculty Mentor</h3>
+                        <div class="input-group">
+                            <label>Mentor Name <span class="req">*</span></label>
+                            <input type="text" class="form-control" name="mentorName" required>
+                        </div>
+                        <div class="grid-2">
+                            <div class="input-group">
+                                <label>Mobile Number <span class="req">*</span></label>
+                                <input type="tel" class="form-control" name="mentorMobile" required pattern="[0-9]{10}">
+                            </div>
+                            <div class="input-group">
+                                <label>Email Address <span class="req">*</span></label>
+                                <input type="email" class="form-control" name="mentorEmail" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-submit" id="submitBtn">🚀 LAUNCH REGISTRATION</button>
+                    
+                    <div id="submit-status"></div>
+                </form>
+            </div>
+        </div>
+    </main>

@@ -1,0 +1,268 @@
+    <!-- JAVASCRIPT -->
+    <script>
+        // Data: 50 Problem Statements
+        const problems = [
+            // Software
+            { id: "SW001", title: "Hyperlocal Connectivity for Street Vendors", category: "Web/App", theme: "Smart Economy", desc: "Build a digital platform enabling street vendors to list products, receive online orders, accept digital payments, and get discovered by nearby customers using GPS." },
+            { id: "SW002", title: "Farm-to-Consumer Direct Marketplace Portal", category: "Web Application", theme: "AgriTech", desc: "Create a web portal that connects farmers directly with consumers, eliminates middlemen, and ensures fair pricing with real-time product listings and order tracking." },
+            { id: "SW003", title: "Village Water Tank Monitoring Dashboard", category: "IoT + Web", theme: "Smart Village", desc: "Develop a real-time web dashboard that displays village water tank levels using IoT sensor data, sends low-level alerts to authorities, and logs usage history." },
+            { id: "SW004", title: "Real-Time TNSTC Bus Tracking System for Rural Routes", category: "Mobile App", theme: "Smart Transportation", desc: "Build a mobile app that tracks TNSTC buses on rural routes in real time, shows live ETAs, seat availability, and sends push notifications to waiting passengers." },
+            { id: "SW005", title: "AI-Based Breed Recognition for Indian Cattle & Buffaloes", category: "AI/ML", theme: "Agri AI", desc: "Train an AI/ML model that identifies Indian cattle and buffalo breeds from uploaded photos, provides breed information, and suggests veterinary care tips." },
+            { id: "SW006", title: "Mobile Data Protection and Vulnerability Detection Tool", category: "Cyber Security", theme: "Digital Security", desc: "Create a tool that scans Android/iOS devices for vulnerabilities, detects suspicious apps, data leaks, and weak permissions, and generates a security health report." },
+            { id: "SW007", title: "Smart Attendance System Using QR Code", category: "Software", theme: "EdTech", desc: "Build a QR-code-based attendance system where a unique QR is generated per session, students scan to mark presence, and auto-reports are generated for faculty." },
+            { id: "SW008", title: "AI Chatbot for College Enquiry System", category: "AI", theme: "Education Technology", desc: "Develop an AI chatbot for college websites that answers admission queries, timetable questions, exam results, and department information around the clock." },
+            { id: "SW009", title: "Waste Collection Scheduling App for Municipalities", category: "Mobile App", theme: "Smart City", desc: "Build a municipal waste collection app that displays pickup schedules, allows residents to register complaints, and helps authorities optimize collection routes." },
+            { id: "SW010", title: "Blood Donor Finder System", category: "Web/App", theme: "Healthcare", desc: "Create a location-based blood donor finder that connects patients with registered donors by blood group, distance, and real-time availability with instant notifications." },
+            { id: "SW011", title: "College Event Management Portal", category: "Web App", theme: "Campus Tech", desc: "Build a full-featured event management portal for colleges covering event creation, student registration, result announcements, digital certificates, and photo galleries." },
+            { id: "SW012", title: "Student Study Planner with AI Recommendations", category: "AI", theme: "EdTech", desc: "Develop an AI-powered study planner that creates personalised timetables based on the syllabus, upcoming exam dates, student learning pace, and topic difficulty." },
+            { id: "SW013", title: "Smart Parking Finder App", category: "Mobile App", theme: "Smart Mobility", desc: "Build a smart parking app that shows real-time available slots in public parking areas, allows advance booking, provides navigation, and handles digital payment." },
+            { id: "SW014", title: "Lost & Found Item Reporting Platform", category: "Web", theme: "Campus Utility", desc: "Create a platform where users report lost or found items with descriptions, photos, and location, and the system matches and connects the owner with the finder." },
+            { id: "SW015", title: "Local Job Finder Portal for Rural Youth", category: "Web", theme: "Employment Tech", desc: "Develop a job portal tailored for rural youth featuring local job listings, skill-based matching, government scheme information, and an application progress tracker." },
+            { id: "SW016", title: "Food Waste Redistribution Platform", category: "Web/App", theme: "Sustainability", desc: "Build a platform that connects restaurants, canteens, and households having surplus food with nearby NGOs and shelters for same-day redistribution before wastage." },
+            { id: "SW017", title: "Smart Complaint Management System for Colleges", category: "Web", theme: "Administration", desc: "Create a college complaint management system where students submit grievances, track resolution status in real time, and admins assign and manage complaints." },
+            { id: "SW018", title: "Campus Navigation Mobile Application", category: "Mobile App", theme: "Smart Campus", desc: "Develop an indoor campus navigation app with an interactive map and AR overlay that guides users to classrooms, labs, offices, and facilities across the campus." },
+            { id: "SW019", title: "Public Transport Schedule Optimizer", category: "AI", theme: "Transportation", desc: "Build an AI system that analyses bus schedules, historical passenger demand, and real-time traffic data to suggest optimised routes, frequencies, and timings." },
+            { id: "SW020", title: "AI-Powered Resume Analyzer", category: "AI", theme: "Career Tech", desc: "Develop an AI tool that analyses resumes against job descriptions, provides an ATS compatibility score, highlights gaps, and suggests specific improvements." },
+            { id: "SW021", title: "Online Voting System for Student Elections", category: "Security", theme: "E-Governance", desc: "Build a secure, tamper-proof online voting system for student elections using OTP-based authentication, encrypted vote storage, and real-time result display." },
+            { id: "SW022", title: "Smart Health Symptom Checker", category: "AI", theme: "Healthcare", desc: "Create an AI symptom checker where users describe their symptoms and receive probable diagnoses, severity ratings, first-aid advice, and nearby clinic suggestions." },
+            { id: "SW023", title: "AI-Based Fake News Detection Tool", category: "AI", theme: "Digital Literacy", desc: "Build an AI tool that analyses news articles and social media posts using NLP to detect misinformation, assigns a credibility score, and cross-references reliable sources." },
+            { id: "SW024", title: "Personal Expense Tracker with Analytics", category: "FinTech", theme: "Financial Literacy", desc: "Develop a personal finance app that tracks income and expenses, categorises spending, visualises habits through charts, sets budget goals, and gives saving tips." },
+            { id: "SW025", title: "Farmer Weather Advisory App", category: "Mobile App", theme: "AgriTech", desc: "Create a mobile app that gives farmers hyper-localised weather forecasts with crop advisory on optimal sowing, irrigation scheduling, and harvest timing." },
+            
+            // Hardware
+            { id: "HW001", title: "Smart Water Level Monitoring System for Village Tanks", category: "IoT", theme: "Smart Village", desc: "Build an IoT sensor system that monitors water levels in village tanks, triggers buzzer and SMS alerts when levels are critically low, and sends data to a web dashboard." },
+            { id: "HW002", title: "IoT-Based Smart Irrigation System", category: "IoT", theme: "AgriTech", desc: "Design an automated irrigation system using soil moisture sensors and a microcontroller that opens or closes water valves based on real-time soil condition data." },
+            { id: "HW003", title: "Smart Push Cart with Digital Payment & GPS", category: "Embedded", theme: "Smart Economy", desc: "Build an embedded system for street vendor push carts that includes GPS tracking, a digital payment QR display, and a buzzer alert for boundary violations." },
+            { id: "HW004", title: "Automatic Street Light Control System", category: "Embedded", theme: "Energy", desc: "Design a smart street light system that auto-turns ON at dusk and OFF at dawn using LDR sensors, and dims intelligently based on ambient light conditions to save power." },
+            { id: "HW005", title: "Smart Dustbin with Waste Level Detection", category: "IoT", theme: "Smart City", desc: "Build an IoT-enabled dustbin that detects fill level using ultrasonic sensors, sends alerts to municipal workers when full, and logs collection data to a server." },
+            { id: "HW006", title: "Portable Water Quality Monitoring Device", category: "IoT", theme: "Health", desc: "Create a portable device that measures water pH, turbidity, and TDS levels in real time using sensors, displays readings on an LCD, and alerts if unsafe." },
+            { id: "HW007", title: "Smart Helmet for Accident Detection", category: "Embedded", theme: "Safety", desc: "Design a smart helmet with accelerometer and gyroscope sensors that detects sudden impacts, automatically sends an SOS with GPS location to emergency contacts." },
+            { id: "HW008", title: "IoT-Based Bus Location Tracker", category: "IoT", theme: "Transportation", desc: "Build an IoT GPS tracker installed in buses that transmits live location to a central server, enabling passengers to track buses in real time via a web interface." },
+            { id: "HW009", title: "Smart Farming Soil Monitoring Device", category: "IoT", theme: "AgriTech", desc: "Develop an IoT soil monitoring device that continuously measures moisture, temperature, and pH, displays the data locally, and sends alerts when crop conditions are poor." },
+            { id: "HW010", title: "Solar Powered Mobile Charging Station", category: "Energy", theme: "Renewable", desc: "Build a solar-powered public mobile charging station with multiple USB ports, a battery storage unit, and a display showing available charge level and usage count." },
+            { id: "HW011", title: "Automatic Plant Watering System", category: "IoT", theme: "AgriTech", desc: "Design an automated plant watering system using soil moisture sensors and a water pump controlled by a microcontroller that waters plants only when soil is dry." },
+            { id: "HW012", title: "Smart Home Security System", category: "Embedded", theme: "Security", desc: "Build a home security system using PIR motion sensors, a camera module, and GSM that triggers alarms and sends photos to the homeowner on detecting intrusion." },
+            { id: "HW013", title: "Smart Parking Sensor System", category: "IoT", theme: "Smart City", desc: "Create an IoT parking sensor system using IR sensors at each slot, displaying real-time occupancy on an LED panel and pushing slot data to a mobile app." },
+            { id: "HW014", title: "IoT-Based Gas Leakage Detection System", category: "Safety", theme: "Home Safety", desc: "Build a gas leakage detection system using MQ-series sensors that triggers a buzzer alarm, activates an exhaust fan, and sends an SMS alert on detecting gas leaks." },
+            { id: "HW015", title: "Smart Blind Navigation Stick", category: "Assistive Tech", theme: "Healthcare", desc: "Design a smart walking stick for visually impaired people that uses ultrasonic sensors to detect obstacles, vibrates or beeps as warnings, and includes a GPS tracker." },
+            { id: "HW016", title: "IoT-Based Weather Monitoring Station", category: "IoT", theme: "Environment", desc: "Build a local weather monitoring station using temperature, humidity, pressure, and rain sensors that displays live readings on an LCD and logs data to the cloud." },
+            { id: "HW017", title: "Automatic Garbage Sorting Machine", category: "Embedded", theme: "Waste Management", desc: "Design a machine that automatically separates wet and dry garbage using moisture sensors and a servo-driven sorting mechanism, reducing manual sorting effort." },
+            { id: "HW018", title: "Smart Energy Meter Monitoring Device", category: "IoT", theme: "Energy", desc: "Build a smart energy meter add-on that tracks real-time electricity consumption, displays usage and cost on an OLED screen, and pushes alerts for unusual spikes." },
+            { id: "HW019", title: "IoT-Based Flood Alert System", category: "IoT", theme: "Disaster", desc: "Create a flood alert system using water level sensors placed at rivers or low-lying areas that triggers sirens and sends SMS/app alerts to residents when levels rise." },
+            { id: "HW020", title: "Smart Bicycle Tracking System", category: "Embedded", theme: "Transportation", desc: "Build an embedded GPS tracker for bicycles that logs the route, sends theft alerts to the owner when the bicycle is moved without authorization, via GSM." },
+            { id: "HW021", title: "IoT-Based Classroom Environment Monitor", category: "IoT", theme: "Education", desc: "Develop an IoT device that monitors CO2 levels, temperature, and humidity inside classrooms, displays readings, and alerts when ventilation is needed." },
+            { id: "HW022", title: "Solar Powered Street Light Controller", category: "Energy", theme: "Renewable", desc: "Design a solar street light controller that manages charging, battery health, and auto ON/OFF with a web dashboard showing power generation and consumption data." },
+            { id: "HW023", title: "Smart Door Lock System", category: "Embedded", theme: "Security", desc: "Build a smart door lock system using RFID cards and a keypad with PIN that grants/denies access, logs entry attempts, and sends alerts for unauthorized tries." },
+            { id: "HW024", title: "IoT-Based Smart Greenhouse Monitoring", category: "IoT", theme: "AgriTech", desc: "Create an IoT greenhouse monitoring system that tracks temperature, humidity, light, and soil moisture, automates fans and irrigation, and logs data to a cloud dashboard." },
+            { id: "HW025", title: "Wearable Health Monitoring Device", category: "IoT", theme: "Healthcare", desc: "Build a wearable IoT device that continuously monitors heart rate, SpO2, and body temperature, displays vitals on a small screen, and alerts on abnormal readings." }
+        ];
+
+        // Particle System
+        const particleContainer = document.getElementById('particles');
+        for (let i = 0; i < 20; i++) {
+            let p = document.createElement('div');
+            p.classList.add('particle');
+            p.style.width = Math.random() * 5 + 3 + 'px';
+            p.style.height = p.style.width;
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.animationDelay = Math.random() * 8 + 's';
+            p.style.animationDuration = Math.random() * 5 + 8 + 's';
+            particleContainer.appendChild(p);
+        }
+
+        // SPA Navigation
+        function navigate(pageId) {
+            // Close mobile menu
+            document.querySelector('.nav-links').classList.remove('active');
+            
+            const pages = document.querySelectorAll('.page');
+            const navLinks = document.querySelectorAll('.nav-btn');
+            
+            // Fade out current
+            pages.forEach(p => p.style.opacity = '0');
+            navLinks.forEach(n => n.classList.remove('active'));
+            
+            setTimeout(() => {
+                pages.forEach(p => p.classList.remove('active'));
+                
+                // Show new page
+                const target = document.getElementById(pageId);
+                target.classList.add('active');
+                document.querySelector(`[data-target="${pageId}"]`).classList.add('active');
+                
+                // Trigger reveals again for the new page
+                setTimeout(() => {
+                    target.style.opacity = '1';
+                    setupReveals();
+                }, 50);
+            }, 300); // Wait for fade out
+        }
+
+        function toggleMenu() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        }
+
+        // Scroll reveals using IntersectionObserver
+        const revealCb = (entries, observer) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        };
+        const revealObserver = new IntersectionObserver(revealCb, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+
+        function setupReveals() {
+            const reveals = document.querySelectorAll('.page.active .reveal:not(.active)');
+            reveals.forEach(el => revealObserver.observe(el));
+        }
+
+        // Load Problems Grid
+        const grid = document.getElementById('problems-container');
+        function renderProblems(filterType) {
+            grid.innerHTML = '';
+            let count = 0;
+            problems.forEach(p => {
+                const isSw = p.id.startsWith('SW');
+                if(filterType === 'all' || (filterType === 'sw' && isSw) || (filterType === 'hw' && !isSw)) {
+                    count++;
+                    const card = document.createElement('div');
+                    card.className = `problem-card reveal ${isSw ? 'sw' : 'hw'}`;
+                    card.innerHTML = `
+                        <div class="card-top-accent"></div>
+                        <div class="card-header">
+                            <span class="pid-badge">${p.id}</span>
+                            <span class="theme-tag">${p.theme}</span>
+                        </div>
+                        <div class="problem-title">${p.title}</div>
+                        <div class="problem-category">${p.category}</div>
+                        <div class="problem-desc">${p.desc}</div>
+                    `;
+                    grid.appendChild(card);
+                    revealObserver.observe(card);
+                }
+            });
+            document.getElementById('problem-count').innerText = `Showing ${count} of 50 problems`;
+        }
+
+        function filterProblems(type) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderProblems(type);
+        }
+
+        // Generate Members dynamically
+        const memContainer = document.getElementById('membersContainer');
+        for(let i=2; i<=5; i++){
+            memContainer.innerHTML += `
+                <div style="margin-bottom:1.5rem; padding-bottom:1rem; border-bottom:1px dashed rgba(255,255,255,0.1);">
+                    <label style="color:var(--accent-cyan); margin-bottom:10px; display:block;">Member ${i}</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="member${i}Name" placeholder="Full Name">
+                    </div>
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <input type="tel" class="form-control" name="member${i}Mobile" placeholder="Mobile" pattern="[0-9]{10}">
+                        </div>
+                        <div class="input-group">
+                            <input type="email" class="form-control" name="member${i}Email" placeholder="Email">
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Handle forms
+        function updateTrackLabel() {
+            const id = document.getElementById('problemIdInput').value.trim().toUpperCase();
+            const lbl = document.getElementById('track-label');
+            if (id.startsWith('SW')) {
+                lbl.innerText = "⚡ Software Track Auto-Detected";
+                lbl.style.color = "var(--accent-cyan)";
+            } else if (id.startsWith('HW')) {
+                lbl.innerText = "🔧 Hardware Track Auto-Detected";
+                lbl.style.color = "var(--accent-violet)";
+            } else {
+                lbl.innerText = "";
+            }
+        }
+
+        function handleFileUpload(e) {
+            const file = e.target.files[0];
+            const btnT = document.getElementById('fileBtnText');
+            const err = document.getElementById('fileError');
+            if(file) {
+                if(file.size > 2 * 1024 * 1024) { // 2MB limit
+                    err.style.display = 'block';
+                    err.innerText = "File must be under 2MB.";
+                    e.target.value = '';
+                    btnT.innerHTML = "📄 Upload ID Card (Image/PDF)";
+                    return;
+                }
+                err.style.display = 'none';
+                btnT.innerHTML = "✅ " + file.name + " (" + (file.size/1024).toFixed(0) + "KB)";
+                
+                const reader = new FileReader();
+                reader.onload = function(readerEvt) {
+                    const base64Data = btoa(readerEvt.target.result);
+                    document.getElementById('idCardBase64').value = "data:" + file.type + ";base64," + base64Data;
+                };
+                reader.readAsBinaryString(file);
+            }
+        }
+
+        document.getElementById('regForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const status = document.getElementById('submit-status');
+            const fd = new FormData(e.target);
+            const data = Object.fromEntries(fd.entries());
+            data.track = (data.problemId.toUpperCase().startsWith('HW')) ? 'Hardware' : 'Software';
+
+            // Google Apps Script URL
+            const SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL';
+            
+            btn.innerHTML = "⏳ SUBMITTING...";
+            btn.style.opacity = '0.7';
+            btn.disabled = true;
+
+            try {
+                if(SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL') {
+                    throw new Error("Please replace YOUR_GOOGLE_APPS_SCRIPT_URL in your code with your deployed Web App URL.");
+                }
+
+                const res = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', // standard gas cross-origin bypass
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                // Note: no-cors means response is opaque, assume success if no thrown network error
+                
+                status.style.display = 'block';
+                status.className = 'status-success';
+                status.innerHTML = `Registration Successful! 🎉<br><span style="color:#d1d5db;font-weight:normal;font-size:0.9rem;">Team ${data.teamName} registered for ${data.problemId}. We'll contact you via email.</span>`;
+                e.target.reset();
+                document.getElementById('fileBtnText').innerHTML = "📄 Upload ID Card (Image/PDF)";
+            } catch(error) {
+                status.style.display = 'block';
+                status.className = 'status-error';
+                status.innerText = "Error: " + error.message;
+            } finally {
+                btn.innerHTML = "🚀 LAUNCH REGISTRATION";
+                btn.style.opacity = '1';
+                btn.disabled = false;
+            }
+        });
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProblems('all');
+            setupReveals();
+            
+            // Re-apply reveals on scroll
+            window.addEventListener('scroll', setupReveals);
+        });
+    </script>
+</body>
+</html>
