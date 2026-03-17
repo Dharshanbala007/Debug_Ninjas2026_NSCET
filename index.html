@@ -241,8 +241,11 @@
 
     <main id="home" class="page active">
         <div class="home-container reveal">
+            
             <div class="logos">
                 <img src="nscetlogo.png" alt="NSCET Logo">
+                <div class="logo-divider"></div>
+                <img src="refined7thsenselogo.jpeg" alt="Refined 7th Sense Logo" style="height: 110px;">
                 <div class="logo-divider"></div>
                 <img src="7th_sense.png" alt="7th Sense Logo" style="border-radius: 50%;">
             </div>
@@ -868,7 +871,6 @@
             }
 
             // ─── INSTANT FRONTEND DUPLICATE CHECKER ─────────────────────────────────
-            // This stops identical numbers inside the current form before sending to Google!
             const regInputs = [
                 data.leaderMobile, data.member2Mobile, data.member3Mobile, 
                 data.member4Mobile, data.member5Mobile, data.member6Mobile, data.seniorMobile
@@ -888,7 +890,6 @@
             btn.innerHTML = "⏳ SUBMITTING..."; btn.style.opacity = '0.7'; btn.disabled = true;
 
             try {
-                // By removing 'mode: no-cors' and switching to text/plain, we can finally read Google's specific error rejections directly!
                 const res = await fetch(SCRIPT_URL, {
                     method: 'POST', 
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' }, 
@@ -897,7 +898,6 @@
                 
                 const result = await res.json();
                 
-                // Catch the duplicate errors from the backend Google App Script
                 if (result.status === "error") {
                     throw new Error(result.message);
                 }
