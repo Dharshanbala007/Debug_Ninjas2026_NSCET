@@ -27,7 +27,7 @@
             background-color: var(--bg-dark);
             color: var(--text-light);
             overflow-x: hidden;
-            width: 100%; /* Added to fix centering */
+            width: 100%;
             background-image: 
                 radial-gradient(circle at 15% 50%, rgba(124, 58, 237, 0.15), transparent 40%),
                 radial-gradient(circle at 85% 30%, rgba(0, 245, 196, 0.15), transparent 40%);
@@ -69,7 +69,6 @@
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
-        /* Added width: 100% below to perfectly center all sections */
         .home-container { width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: calc(100vh - 80px); position: relative; z-index: 10; padding: 2rem; }
         .logos { display: flex; align-items: center; justify-content: center; gap: 2.5rem; margin-bottom: 1.5rem; background: rgba(0,0,0,0.3); padding: 1.5rem 2.5rem; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
         .logos img { height: 100px; width: auto; object-fit: contain; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); transition: transform 0.3s; }
@@ -277,7 +276,7 @@
                 </div>
                 <div class="stat-box glass">
                     <div class="stat-num mono">6</div>
-                    <div class="stat-label">Members/Team</div>
+                    <div class="stat-label">Members/Team<br><span style="font-size: 0.8rem; color: var(--highlight-amber);">4 Girls & 2 Boys</span></div>
                 </div>
                 <div class="stat-box glass">
                     <div class="stat-num mono">1</div>
@@ -350,7 +349,7 @@
                 </div>
                 <div class="about-card glass reveal" style="grid-column: 1 / -1;">
                     <h3>⚔️ Next Gen Ninjas Hackathon</h3>
-                    <p>A rigorous 6-hour intra-college hackathon featuring 50 real-world problem statements (25 Software, 25 Hardware). Teams of up to 6 members, guided by a faculty mentor, will race against time to architect and prototype innovative solutions under intense pressure.</p>
+                    <p>A rigorous 6-hour intra-college hackathon featuring 50 real-world problem statements (25 Software, 25 Hardware). Teams of exactly 6 members (mandatory: 4 girls and 2 boys), guided by a faculty mentor, will race against time to architect and prototype innovative solutions under intense pressure.</p>
                 </div>
             </div>
 
@@ -376,29 +375,23 @@
                 </div>
                 <div class="timeline-item timeline-right reveal">
                     <div class="timeline-content">
-                        <h4>📋 Problem Release</h4>
-                        <p>7 Apr 2026, 9:00 AM</p>
-                    </div>
-                </div>
-                <div class="timeline-item timeline-left reveal">
-                    <div class="timeline-content">
                         <h4>💻 Hacking Begins</h4>
                         <p>7 Apr 2026, 10:00 AM</p>
                     </div>
                 </div>
-                <div class="timeline-item timeline-right reveal">
+                <div class="timeline-item timeline-left reveal">
                     <div class="timeline-content">
                         <h4>🍱 Mid-Review</h4>
                         <p>7 Apr 2026, 1:00 PM</p>
                     </div>
                 </div>
-                <div class="timeline-item timeline-left reveal">
+                <div class="timeline-item timeline-right reveal">
                     <div class="timeline-content">
                         <h4>🏁 Final Submission</h4>
                         <p>7 Apr 2026, 4:00 PM</p>
                     </div>
                 </div>
-                <div class="timeline-item timeline-right reveal">
+                <div class="timeline-item timeline-left reveal">
                     <div class="timeline-content">
                         <h4>🏆 Results & Prizes</h4>
                         <p>7 Apr 2026, 5:00 PM</p>
@@ -558,7 +551,7 @@
 
                     <div class="form-section">
                         <h3 class="form-section-title"><span>👥</span> Section C: Team Members</h3>
-                        <p style="color:var(--text-muted); margin-bottom:1rem; font-size:0.9rem;">Fill details for 2nd to 6th members. (Optional if team is smaller)</p>
+                        <p style="color:var(--text-muted); margin-bottom:1rem; font-size:0.9rem;">Fill details for all remaining members. <br><strong style="color: var(--highlight-amber);">Strict Rule: Each team must consist of exactly 6 members (4 Girls and 2 Boys).</strong></p>
                         
                         <div id="membersContainer"></div>
                     </div>
