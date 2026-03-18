@@ -57,8 +57,9 @@
         .glass { background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 16px; box-shadow: var(--glass-shadow); }
 
         nav { position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-bottom: 1px solid rgba(0, 245, 196, 0.2); background: rgba(3, 7, 18, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
-        .nav-logo { font-size: 1.5rem; font-weight: 700; color: var(--text-light); text-shadow: 0 0 10px var(--accent-cyan); cursor: pointer; }
-        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-logo-container { cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .nav-logo-img { height: 60px; width: auto; object-fit: contain; }
+        .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
         .nav-links a { color: var(--text-light); text-decoration: none; font-size: 1.1rem; font-weight: 600; transition: all 0.3s ease; cursor: pointer; position: relative; }
         .nav-links a::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0; background-color: var(--accent-cyan); transition: width 0.3s; box-shadow: 0 0 5px var(--accent-cyan); }
         .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
@@ -123,7 +124,6 @@
         .btn-outline:hover { background-color: rgba(0, 245, 196, 0.1); box-shadow: 0 0 20px rgba(0, 245, 196, 0.3); transform: scale(1.05); }
         .organizer-text { font-size: 1rem; color: var(--text-muted); margin-top: 2rem; }
 
-        /* Ensure content blocks are fully 100% width and centered correctly */
         .content-container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 2rem; position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; }
         .page-title { text-align: center; font-size: 3rem; margin-bottom: 3rem; color: var(--text-light); text-shadow: 0 0 15px rgba(255, 255, 255, 0.2); position: relative; }
         .page-title::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 100px; height: 3px; background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent); }
@@ -224,7 +224,9 @@
     <div id="particles"></div>
 
     <nav class="glass">
-        <div class="nav-logo orbitron" onclick="navigate('home')">DEV_NINJA</div>
+        <div class="nav-logo-container" onclick="navigate('home')">
+            <img src="image_4.png" alt="7th Sense Logo" class="nav-logo-img">
+        </div>
         <div class="hamburger" onclick="toggleMenu()">
             <div></div>
             <div></div>
@@ -245,7 +247,7 @@
             <div class="logos">
                 <img src="nscetlogo.png" alt="NSCET Logo">
                 <div class="logo-divider"></div>
-                <img src="refined7thsenselogo.png" alt="Refined 7th Sense Logo" style="height: 110px;">
+                <img src="image_4.png" alt="Refined 7th Sense Logo" style="height: 110px;">
                 <div class="logo-divider"></div>
                 <img src="7th_sense.png" alt="7th Sense Logo" style="border-radius: 50%;">
             </div>
@@ -255,7 +257,7 @@
             <h1 class="hero-title">
                 <span class="solid">The Next Gen Ninjas</span> <span class="outline">- 2K26</span>
             </h1>
-            <p class="hero-subtitle">An Intra College 6 Hour Hackathon ( Exclusively For First Year )</p>
+            <p class="hero-subtitle">An Intra College 6 Hours Hackathon</p>
             
             <div class="venue-badge glass">
                 📅 7th April 2026 &nbsp;|&nbsp; 📍 NSCET Campus, Vadapudupatti, Theni – 625 531
@@ -620,6 +622,10 @@
     </main>
 
     <script>
+        // Problem Counts (to be fetched from the backend)
+        let problemCounts = {};
+        
+        // 50 Problem Statements
         const problems = [
             { id: "SW001", title: "Hyperlocal Connectivity for Street Vendors", category: "Web/App", theme: "Smart Economy", desc: "Build a digital platform enabling street vendors to list products, receive online orders, accept digital payments, and get discovered by nearby customers using GPS." },
             { id: "SW002", title: "Farm-to-Consumer Direct Marketplace Portal", category: "Web Application", theme: "AgriTech", desc: "Create a web portal that connects farmers directly with consumers, eliminates middlemen, and ensures fair pricing with real-time product listings and order tracking." },
@@ -740,6 +746,19 @@
             reveals.forEach(el => revealObserver.observe(el));
         }
 
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx9J4eckSxoliS7b1asSj6BX6rm8I76iVuFB5EwDJo6OWOnRkYlUvkZzjt-CL8i3w0U/exec';
+
+        // --- NEW: FETCH PROBLEM COUNTS ON LOAD ---
+        async function fetchProblemCounts() {
+            try {
+                const res = await fetch(SCRIPT_URL); 
+                problemCounts = await res.json();
+                renderProblems('all'); 
+            } catch (err) {
+                console.error("Could not fetch problem counts", err);
+            }
+        }
+
         const grid = document.getElementById('problems-container');
         function renderProblems(filterType) {
             grid.innerHTML = '';
@@ -748,13 +767,30 @@
                 const isSw = p.id.startsWith('SW');
                 if(filterType === 'all' || (filterType === 'sw' && isSw) || (filterType === 'hw' && !isSw)) {
                     count++;
+                    
+                    // Fetch real-time count data for this specific problem statement
+                    const pCount = problemCounts[p.id] || 0;
+                    const isFull = pCount >= 2;
+                    
+                    // Construct HTML elements based on capacity
+                    const statusHtml = isFull ? `<span style="color:#ef4444; font-weight:bold; font-size:0.8rem; border:1px solid #ef4444; padding:2px 6px; border-radius:12px;">🛑 FULL (2/2)</span>` : 
+                                       (pCount === 1 ? `<span style="color:var(--highlight-amber); font-weight:bold; font-size:0.8rem; border:1px solid var(--highlight-amber); padding:2px 6px; border-radius:12px;">⚠️ 1 Slot Left</span>` : 
+                                       `<span style="color:var(--accent-cyan); font-weight:bold; font-size:0.8rem; border:1px solid var(--accent-cyan); padding:2px 6px; border-radius:12px;">✅ Available</span>`);
+
                     const card = document.createElement('div');
                     card.className = `problem-card reveal ${isSw ? 'sw' : 'hw'}`;
+                    
+                    // Fade out effect if problem statement is chosen by 2 teams already
+                    if (isFull) card.style.opacity = '0.4';
+
                     card.innerHTML = `
                         <div class="card-top-accent"></div>
                         <div class="card-header">
-                            <span class="pid-badge">${p.id}</span>
-                            <span class="theme-tag">${p.theme}</span>
+                            <div>
+                                <span class="pid-badge">${p.id}</span>
+                                <span class="theme-tag">${p.theme}</span>
+                            </div>
+                            ${statusHtml}
                         </div>
                         <div class="problem-title">${p.title}</div>
                         <div class="problem-category">${p.category}</div>
@@ -811,6 +847,7 @@
             const check = document.getElementById('openStatementCheck');
             const input = document.getElementById('problemIdInput');
             const lbl = document.getElementById('track-label');
+            const submitBtn = document.getElementById('submitBtn');
             
             if (check.checked) {
                 input.value = "Open Statement";
@@ -819,6 +856,10 @@
                 input.style.color = "var(--highlight-amber)";
                 lbl.innerText = "🌟 Open Track Selected";
                 lbl.style.color = "var(--highlight-amber)";
+                
+                // Allow submission for open statements (they don't have capacity limits)
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = '1';
             } else {
                 input.value = "";
                 input.readOnly = false;
@@ -828,11 +869,25 @@
             }
         }
 
+        // --- NEW: DISABLE SUBMIT BUTTON IF TYPED PROBLEM ID IS ALREADY FULL ---
         function updateTrackLabel() {
             if (document.getElementById('openStatementCheck') && document.getElementById('openStatementCheck').checked) return;
             
             const id = document.getElementById('problemIdInput').value.trim().toUpperCase();
             const lbl = document.getElementById('track-label');
+            const submitBtn = document.getElementById('submitBtn');
+
+            if (problemCounts[id] >= 2) {
+                lbl.innerText = "🛑 THIS PROBLEM IS FULL! Choose another."; 
+                lbl.style.color = "#ef4444";
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = '0.5';
+                return;
+            } else {
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = '1';
+            }
+
             if (id.startsWith('SW')) { lbl.innerText = "⚡ Software Track Auto-Detected"; lbl.style.color = "var(--accent-cyan)"; } 
             else if (id.startsWith('HW')) { lbl.innerText = "🔧 Hardware Track Auto-Detected"; lbl.style.color = "var(--accent-violet)"; } 
             else { lbl.innerText = ""; }
@@ -870,7 +925,6 @@
                 data.track = (data.problemId.toUpperCase().startsWith('HW')) ? 'Hardware' : 'Software';
             }
 
-            // ─── INSTANT FRONTEND DUPLICATE CHECKER ─────────────────────────────────
             const regInputs = [
                 data.leaderMobile, data.member2Mobile, data.member3Mobile, 
                 data.member4Mobile, data.member5Mobile, data.member6Mobile, data.seniorMobile
@@ -882,10 +936,8 @@
                 status.style.display = 'block'; 
                 status.className = 'status-error';
                 status.innerText = "Error: You have entered the SAME Register Number for multiple members! Each member must have a unique Register Number.";
-                return; // Stop form submission!
+                return;
             }
-
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx9J4eckSxoliS7b1asSj6BX6rm8I76iVuFB5EwDJo6OWOnRkYlUvkZzjt-CL8i3w0U/exec';
             
             btn.innerHTML = "⏳ SUBMITTING..."; btn.style.opacity = '0.7'; btn.disabled = true;
 
@@ -905,6 +957,9 @@
                 status.style.display = 'block'; status.className = 'status-success';
                 status.innerHTML = `Registration Successful! 🎉<br><span style="color:#d1d5db;font-weight:normal;font-size:0.9rem;">Team ${data.teamName} registered for ${data.problemId}. We'll contact you via email.</span>`;
                 e.target.reset(); document.getElementById('fileBtnText').innerHTML = "📄 Upload ID Card (Image/PDF)";
+                
+                // Fetch new capacities after successful submission
+                fetchProblemCounts();
             } catch(error) {
                 status.style.display = 'block'; status.className = 'status-error'; status.innerText = "Error: " + error.message;
             } finally {
@@ -912,7 +967,12 @@
             }
         });
 
-        document.addEventListener('DOMContentLoaded', () => { renderProblems('all'); setupReveals(); window.addEventListener('scroll', setupReveals); });
+        document.addEventListener('DOMContentLoaded', () => { 
+            renderProblems('all'); 
+            fetchProblemCounts(); // Retrieve capacity from backend upon page load
+            setupReveals(); 
+            window.addEventListener('scroll', setupReveals); 
+        });
     </script>
 </body>
 </html>
